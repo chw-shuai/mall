@@ -40,35 +40,35 @@ public class CategoryServiceImpl implements ICategoryService {
                 .sorted(Comparator.comparing(CategoryVo::getSortOrder).reversed())
                 .collect(Collectors.toList());
         //查询子目录
-        findSubCategory(categories,categoryVoList);
+        findSubCategory(categories, categoryVoList);
         return ResponseVo.success(categoryVoList);
     }
 
     @Override
     public void findSubCategoryId(Integer id, Set<Integer> resultSet) {
         List<Category> categories = categoryMapper.selectAllCategory();
-        findSubCategoryId(id, resultSet ,categories);
+        findSubCategoryId(id, resultSet, categories);
     }
 
-    public void findSubCategoryId(Integer id, Set<Integer> resultSet,List<Category> categories) {
+    public void findSubCategoryId(Integer id, Set<Integer> resultSet, List<Category> categories) {
         for (Category category : categories) {
-            if (category.getParentId().equals(id)){
+            if (category.getParentId().equals(id)) {
                 resultSet.add(category.getId());
-                findSubCategoryId(category.getId(),resultSet,categories);
+                findSubCategoryId(category.getId(), resultSet, categories);
             }
         }
     }
 
-    private void findSubCategory(List<Category> categories,List<CategoryVo>categoryVoList){
+    private void findSubCategory(List<Category> categories, List<CategoryVo> categoryVoList) {
 
         //遍历所有父目录
         for (CategoryVo categoryVo : categoryVoList) {
             //存放所有子目录
-            List<CategoryVo>subCategoryVoList = new ArrayList<>();
+            List<CategoryVo> subCategoryVoList = new ArrayList<>();
             //遍历所有目录
             for (Category category : categories) {
                 //如何父目录的id 等于 子目录的 ParentId
-                if (categoryVo.getId().equals(category.getParentId())){
+                if (categoryVo.getId().equals(category.getParentId())) {
                     //就把该目录存放到 子目录集合
                     subCategoryVoList.add(category2CategoryVo(category));
                 }
@@ -77,14 +77,14 @@ public class CategoryServiceImpl implements ICategoryService {
                 //再把子目录存放到父目录的属性中
                 categoryVo.setCategoryVoList(subCategoryVoList);
                 //递归实现 多及目录查询 将子目录再次1进行传递
-                findSubCategory(categories,subCategoryVoList);
+                findSubCategory(categories, subCategoryVoList);
             }
         }
     }
 
-    private CategoryVo category2CategoryVo(Category category){
+    private CategoryVo category2CategoryVo(Category category) {
         CategoryVo categoryVo = new CategoryVo();
-        BeanUtils.copyProperties(category,categoryVo);
+        BeanUtils.copyProperties(category, categoryVo);
         return categoryVo;
     }
 }

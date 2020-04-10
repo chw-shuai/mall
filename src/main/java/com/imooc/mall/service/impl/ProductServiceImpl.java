@@ -37,20 +37,20 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ResponseVo<PageInfo> list(Integer categoryId, Integer pageNum, Integer pageSize) {
         Set<Integer> set = new HashSet<>();
-            if (categoryId!=null){
-                iCategoryService.findSubCategoryId(categoryId,set);
-                set.add(categoryId);
+        if (categoryId != null) {
+            iCategoryService.findSubCategoryId(categoryId, set);
+            set.add(categoryId);
 
-            }
-        PageHelper.startPage(pageNum,pageSize);
+        }
+        PageHelper.startPage(pageNum, pageSize);
         List<Product> productList = productMapper.selectByCategoryIdSet(set);
         List<ProductVo> productVoList = new ArrayList<>();
         for (Product product : productList) {
             ProductVo productVo = new ProductVo();
-            BeanUtils.copyProperties(product,productVo);
+            BeanUtils.copyProperties(product, productVo);
             productVoList.add(productVo);
         }
-        log.info("productVoList={}",productVoList);
+        log.info("productVoList={}", productVoList);
         PageInfo pageInfo = new PageInfo(productList);
         pageInfo.setList(productVoList);
         return ResponseVo.success(pageInfo);
@@ -59,13 +59,13 @@ public class ProductServiceImpl implements IProductService {
     @Override
     public ResponseVo<ProductDetailVo> ProductDetailVoList(Integer productId) {
         Product product = productMapper.selectByPrimaryKey(productId);
-        if (product.getStatus().equals(OFF_SALE) || product.getStatus().equals(DELETE)){
+        if (product.getStatus().equals(OFF_SALE) || product.getStatus().equals(DELETE)) {
             throw new RuntimeException(PRODUCT_OFF_SALE_OR_DELETE.getDesc());
         }
         ProductDetailVo productDetailVo = new ProductDetailVo();
-        BeanUtils.copyProperties(product,productDetailVo);
+        BeanUtils.copyProperties(product, productDetailVo);
         //铭感数据的处理
-        productDetailVo.setStock(productDetailVo.getStock()>100?100:productDetailVo.getStock());
+        productDetailVo.setStock(productDetailVo.getStock() > 100 ? 100 : productDetailVo.getStock());
         return ResponseVo.success(productDetailVo);
     }
 }

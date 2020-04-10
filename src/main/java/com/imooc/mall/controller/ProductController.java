@@ -21,14 +21,14 @@ public class ProductController {
 
     @GetMapping("/products")
     ResponseVo<PageInfo> list(@RequestParam(required = false) Integer categoryId,
-                              @RequestParam(required = false ,defaultValue = "1")Integer pageNum,
-                              @RequestParam(required = false, defaultValue = "10")Integer pageSize
-                            ){
-        return productService.list(categoryId,pageNum,pageSize);
+                              @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+                              @RequestParam(required = false, defaultValue = "10") Integer pageSize
+    ) {
+        return productService.list(categoryId, pageNum, pageSize);
     }
 
     @GetMapping("/products/{productId}")
-    ResponseVo<ProductDetailVo> ProductDetail(@PathVariable()Integer productId){
+    ResponseVo<ProductDetailVo> ProductDetail(@PathVariable() Integer productId) {
         ResponseVo<ProductDetailVo> productDetailVoResponseVo = productService.ProductDetailVoList(productId);
         return productDetailVoResponseVo;
     }

@@ -22,7 +22,7 @@ public class CategoryController {
     ICategoryService ICategoryService;
 
     @GetMapping("/categories")
-    public ResponseVo<List<CategoryVo>>categories(){
+    public ResponseVo<List<CategoryVo>> categories() {
 
         return ICategoryService.selectAllCategory();
     }
