@@ -2,6 +2,11 @@ package com.imooc.mall.dao;
 
 import com.imooc.mall.pojo.Category;
 
+import java.util.List;
+
+/**
+ * @author 常红伟
+ */
 public interface CategoryMapper {
     int deleteByPrimaryKey(Integer id);
 
@@ -14,4 +19,7 @@ public interface CategoryMapper {
     int updateByPrimaryKeySelective(Category record);
 
     int updateByPrimaryKey(Category record);
+
+   List<Category> selectAllCategory();
+
 }

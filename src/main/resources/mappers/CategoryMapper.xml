@@ -114,4 +114,12 @@
       update_time = #{updateTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <select id="selectAllCategory"  resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from mall_category
+    where status=1
+  </select>
+
 </mapper>

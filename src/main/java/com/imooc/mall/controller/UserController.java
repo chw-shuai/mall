@@ -23,7 +23,6 @@ import static com.imooc.mall.enums.ResponseEnum.PARAM_ERROR;
 
 @RestController
 @Slf4j
-
 public class UserController {
     @Autowired
     IUserService iUserService;

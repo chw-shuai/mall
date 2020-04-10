@@ -21,6 +21,7 @@ public class ResponseVo<T> {
 
     private T  data;
 
+
     public ResponseVo(Integer status, String msg) {
         this.status = status;
         this.msg = msg;
@@ -30,6 +31,7 @@ public class ResponseVo<T> {
         this.status = status;
         this.data = data;
     }
+
 
     public static <T> ResponseVo<T> successByMsg(String msg){
         return  new ResponseVo<>(ResponseEnum.SUCCESS.getCode(),msg);
