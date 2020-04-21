@@ -28,7 +28,7 @@ public class ProductController {
     }
 
     @GetMapping("/products/{productId}")
-    ResponseVo<ProductDetailVo> ProductDetail(@PathVariable() Integer productId) {
+    ResponseVo<ProductDetailVo> ProductDetail(@PathVariable Integer productId) {
         ResponseVo<ProductDetailVo> productDetailVoResponseVo = productService.ProductDetailVoList(productId);
         return productDetailVoResponseVo;
     }

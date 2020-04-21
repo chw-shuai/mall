@@ -2,8 +2,11 @@ package com.imooc.mall.service;
 
 import com.imooc.mall.form.CartAddForm;
 import com.imooc.mall.form.CartUpdateForm;
+import com.imooc.mall.pojo.Cart;
 import com.imooc.mall.vo.CartVo;
 import com.imooc.mall.vo.ResponseVo;
+
+import java.util.List;
 
 /**
  * 添加购物车
@@ -68,4 +71,12 @@ public interface ICartService {
      * @return
      */
     ResponseVo<Integer> sum(Integer uid);
+
+
+    /**
+     * 获取redis里购物车的列表
+     * @param uid
+     * @return
+     */
+    public List<Cart> listForCart(Integer uid);
 }

@@ -23,7 +23,7 @@ public class CartController {
 
 
     @GetMapping("/carts")
-    ResponseVo<CartVo> list(@Valid @RequestBody HttpSession session) {
+    ResponseVo<CartVo> list(HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
         Integer uid = user.getId();
         return cartService.list(uid);
@@ -37,39 +37,37 @@ public class CartController {
     }
 
     @PutMapping("/carts/{productId}")
-    ResponseVo<CartVo> update(@Valid @RequestBody CartUpdateForm cartUpdateForm, HttpSession session,
-                              @PathVariable Integer productId) {
+    public ResponseVo<CartVo> update(@PathVariable Integer productId,
+                                     @Valid @RequestBody CartUpdateForm form,
+                                     HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
-        Integer uid = user.getId();
-        return cartService.update(uid, productId, cartUpdateForm);
+        return cartService.update(user.getId(), productId, form);
     }
 
     @DeleteMapping("/carts/{productId}")
-    ResponseVo<CartVo> delete(@Valid @RequestBody HttpSession session,
-                              @PathVariable Integer productId) {
+    public ResponseVo<CartVo> delete(@PathVariable Integer productId,
+                                     HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
-        Integer uid = user.getId();
-        return cartService.delete(uid, productId);
+        return cartService.delete(user.getId(), productId);
     }
 
     @PutMapping("/carts/selectAll")
-    ResponseVo<CartVo> selectAll(@Valid @RequestBody HttpSession session) {
+    ResponseVo<CartVo> selectAll(HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
         Integer uid = user.getId();
         return cartService.selectAll(uid);
     }
 
     @PutMapping("/carts/unSelectAll")
-    ResponseVo<CartVo> unSelectAll(@Valid @RequestBody HttpSession session) {
+    ResponseVo<CartVo> unSelectAll( HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
         Integer uid = user.getId();
         return cartService.unSelectAll(uid);
     }
 
     @GetMapping("/carts/products/sum")
-    ResponseVo<Integer> sum(@Valid @RequestBody HttpSession session) {
+    public ResponseVo<Integer> sum(HttpSession session) {
         User user = (User) session.getAttribute(MallConst.CURRENT_USER);
-        Integer uid = user.getId();
-        return cartService.sum(uid);
+        return cartService.sum(user.getId());
     }
 }

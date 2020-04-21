@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class UserServiceImplTest extends MallApplicationTests {
 
-    public static final String USERNAME ="常红伟";
+    public static final String USERNAME ="abc";
     public static final String USER_PASSWORD ="123456789";
 
     @Autowired
@@ -23,9 +23,8 @@ public class UserServiceImplTest extends MallApplicationTests {
 
     @Before
     public void register() {
-        User user = new User(USERNAME,USER_PASSWORD,"1234@qq.com", RoleEnum.ADMIN.getCode());
+        User user = new User(USERNAME,USER_PASSWORD,"12@qq.com", RoleEnum.ADMIN.getCode());
         ResponseVo<User> userResponseVo = iUserService.register(user);
-        Assert.assertEquals(ResponseEnum.SUCCESS.getCode(),userResponseVo.getStatus());
     }
 
     @Test

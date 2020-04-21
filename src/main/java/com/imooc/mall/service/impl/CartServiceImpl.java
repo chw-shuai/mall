@@ -87,61 +87,51 @@ public class CartServiceImpl implements ICartService {
     @Override
     public ResponseVo<CartVo> list(Integer uid) {
         HashOperations<String, String, String> opsForHash = redisTemplate.opsForHash();
-        //redis key
-        String H = String.format(CART_REDIS_KEY_TEMPLATE, uid);
-        //根据key获取全部 key：value
-        Map<String, String> entries = opsForHash.entries(H);
-        //entrySet该方法返回值就是这个map中各个键值对映射关系的集合
-        Set<Map.Entry<String, String>> entrySet = entries.entrySet();
-        //List集合 存放CartProductVo
-        List<CartProductVo> cartProductVoList = new ArrayList<>();
-        //构造返回对象CartVo
-        CartVo cartVo = new CartVo();
-        //是否是全选
-        Boolean selectedAll = true;
-        //全部商品数量
+        String redisKey  = String.format(CART_REDIS_KEY_TEMPLATE, uid);
+        Map<String, String> entries = opsForHash.entries(redisKey);
+
+        boolean selectAll = true;
         Integer cartTotalQuantity = 0;
-        //全部商品总价格
         BigDecimal cartTotalPrice = BigDecimal.ZERO;
-        Set<Integer> set = new HashSet<>();
-        for (Map.Entry<String, String> stringEntry : entrySet) {
-            //获取Key
-            Integer productId = Integer.valueOf(stringEntry.getKey());
-            //获取value 反序列化成Cart对象
-            Cart cart = gson.fromJson(stringEntry.getValue(), Cart.class);
-            //TODO 优化 访问数据库频繁  使用mysql 里面的IN
-            //根据productId查询数据库
-            set.add(productId);
-            List<Product> productList = productMapper.selectByProductIdSet(set);
-            for (Product product : productList) {
-                if (product != null) {
-                    //商品总价
-                    BigDecimal productTotalPrice = (product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())));
-                    //构造CartProductVo
-                    CartProductVo cartProductVo = new CartProductVo(productId, cart.getQuantity(), product.getName(),
-                            product.getSubtitle(), product.getMainImage(), product.getPrice(),
-                            product.getStatus(), productTotalPrice, product.getStock(),
-                            cart.getProductSelected());
-                    cartProductVoList.add(cartProductVo);
-                    //假如有一个商品未被选中  全选就为false
-                    if (!cartProductVo.getProductSelected()) {
-                        selectedAll = false;
-                    }
-                    //只计算选中物品的总价
-                    if (cartProductVo.getProductSelected()) {
-                        cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
-                    }
+        CartVo cartVo = new CartVo();
+        List<CartProductVo> cartProductVoList = new ArrayList<>();
+        for (Map.Entry<String, String> entry : entries.entrySet()) {
+            Integer productId = Integer.valueOf(entry.getKey());
+            Cart cart = gson.fromJson(entry.getValue(), Cart.class);
+
+            //TODO 需要优化，使用mysql里的in
+            Product product = productMapper.selectByPrimaryKey(productId);
+            if (product != null) {
+                CartProductVo cartProductVo = new CartProductVo(productId,
+                        cart.getQuantity(),
+                        product.getName(),
+                        product.getSubtitle(),
+                        product.getMainImage(),
+                        product.getPrice(),
+                        product.getStatus(),
+                        product.getPrice().multiply(BigDecimal.valueOf(cart.getQuantity())),
+                        product.getStock(),
+                        cart.getProductSelected()
+                );
+                cartProductVoList.add(cartProductVo);
+
+                if (!cart.getProductSelected()) {
+                    selectAll = false;
+                }
+
+                //计算总价(只计算选中的)
+                if (cart.getProductSelected()) {
+                    cartTotalPrice = cartTotalPrice.add(cartProductVo.getProductTotalPrice());
                 }
             }
+
             cartTotalQuantity += cart.getQuantity();
         }
-        //是否全选
-        cartVo.setSelectedAll(selectedAll);
-        //购物车总数量
+
+        //有一个没有选中，就不叫全选
+        cartVo.setSelectedAll(selectAll);
         cartVo.setCartTotalQuantity(cartTotalQuantity);
-        //购物车商品总价格
         cartVo.setCartTotalPrice(cartTotalPrice);
-        //添加list集合
         cartVo.setCartProductVoList(cartProductVoList);
         return ResponseVo.success(cartVo);
     }
@@ -222,11 +212,9 @@ public class CartServiceImpl implements ICartService {
 
     @Override
     public ResponseVo<Integer> sum(Integer uid) {
-        List<Cart> cartList = listForCart(uid);
-        Integer sum = 0;
-        for (Cart cart : cartList) {
-            sum += cart.getQuantity();
-        }
+        Integer sum = listForCart(uid).stream()
+                .map(Cart::getQuantity)
+                .reduce(0, Integer::sum);
         return ResponseVo.success(sum);
     }
 

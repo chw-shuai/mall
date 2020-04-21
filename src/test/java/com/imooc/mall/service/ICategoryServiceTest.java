@@ -1,7 +1,8 @@
-package com.imooc.mall.service.impl;
+package com.imooc.mall.service;
 
 import com.imooc.mall.MallApplicationTests;
 import com.imooc.mall.enums.ResponseEnum;
+import com.imooc.mall.service.impl.CategoryServiceImpl;
 import com.imooc.mall.vo.CategoryVo;
 import com.imooc.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Slf4j
-public class ICategoryServiceImplTest extends MallApplicationTests {
+public class ICategoryServiceTest extends MallApplicationTests {
 
     @Autowired
     private CategoryServiceImpl categoryService;

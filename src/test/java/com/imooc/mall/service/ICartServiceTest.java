@@ -1,4 +1,4 @@
-package com.imooc.mall.service.impl;
+package com.imooc.mall.service;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -6,7 +6,6 @@ import com.imooc.mall.MallApplicationTests;
 import com.imooc.mall.enums.ResponseEnum;
 import com.imooc.mall.form.CartAddForm;
 import com.imooc.mall.form.CartUpdateForm;
-import com.imooc.mall.service.ICartService;
 import com.imooc.mall.vo.CartVo;
 import com.imooc.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +16,7 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 @Slf4j
-public class CartServiceImplTest extends MallApplicationTests {
+public class ICartServiceTest extends MallApplicationTests {
     @Autowired
     ICartService cartService;
 
@@ -56,7 +55,7 @@ public class CartServiceImplTest extends MallApplicationTests {
         Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
     }
 
-    @After
+  @After
     public void delete() {
         ResponseVo<CartVo> responseVo = cartService.delete(uid, productId);
         log.info("delete={}", gson.toJson(responseVo));
