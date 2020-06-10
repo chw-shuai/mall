@@ -18,6 +18,7 @@ public class CartVo {
      */
     Boolean selectedAll;
 
+
     /**
      * 购物车商品总价
      */

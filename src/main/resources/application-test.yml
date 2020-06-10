@@ -3,12 +3,12 @@ spring:
       driver-class-name: com.mysql.cj.jdbc.Driver
       username: root
       password: 123456
-      url: jdbc:mysql://127.0.0.1:3306/mall?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
+      url: jdbc:mysql://192.168.31.32:3306/mall?useUnicode=true&characterEncoding=UTF-8&serverTimezone=GMT%2B8
   redis:
     host: 127.0.0.1
     port: 6379
   rabbitmq:
-    addresses: 127.0.0.1
+    addresses: 192.168.31.32
     port: 5672
     username: guest
     password: guest

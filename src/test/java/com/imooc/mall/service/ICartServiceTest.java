@@ -11,7 +11,6 @@ import com.imooc.mall.vo.ResponseVo;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -28,7 +27,7 @@ public class ICartServiceTest extends MallApplicationTests {
     private Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
-    @Before
+    @Test
     public void add() {
         CartAddForm cartAddForm = new CartAddForm();
         cartAddForm.setProductId(productId);
@@ -63,16 +62,16 @@ public class ICartServiceTest extends MallApplicationTests {
     }
 
     @Test
-    public void selectAll() {
-        ResponseVo<CartVo> responseVo = cartService.selectAll(uid);
-        log.info("selectAll={}", gson.toJson(responseVo));
+    public void unSelectAll() {
+        ResponseVo<CartVo> responseVo = cartService.unSelectAll(uid);
+        log.info("unSelectAll={}", gson.toJson(responseVo));
         Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
     }
 
     @Test
-    public void unSelectAll() {
-        ResponseVo<CartVo> responseVo = cartService.unSelectAll(uid);
-        log.info("unSelectAll={}", gson.toJson(responseVo));
+    public void selectAll() {
+        ResponseVo<CartVo> responseVo = cartService.selectAll(uid);
+        log.info("selectAll={}", gson.toJson(responseVo));
         Assert.assertEquals(ResponseEnum.SUCCESS.getCode(), responseVo.getStatus());
     }
 
